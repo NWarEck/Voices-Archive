@@ -1,12 +1,218 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Voices — Patch Archive</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Pro:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Voices — Archive</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Pro:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0b;
+    --surface: #111114;
+    --border: #1e1e24;
+    --text: #c8c8d0;
+    --dim: #4a4a58;
+    --accent: #3a3a48;
+    --voice-glow: rgba(136,136,136,0.06);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-weight: 300;
+    min-height: 100vh;
+    line-height: 1.7;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(ellipse 80% 50% at 50% 30%, var(--voice-glow), transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .top-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 52px;
+    background: linear-gradient(to bottom, rgba(10,10,11,0.98), rgba(10,10,11,0.92));
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 2.5rem;
+    z-index: 100;
+    backdrop-filter: blur(12px);
+  }
+
+  .nav-brand {
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.5em;
+    color: var(--dim);
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+
+  .nav-brand:hover { color: var(--text); }
+
+  .nav-links {
+    display: flex;
+    gap: 2.5rem;
+  }
+
+  .nav-links a {
+    font-family: 'Cinzel', serif;
+    font-size: 0.5rem;
+    letter-spacing: 0.25em;
+    color: var(--dim);
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 0.4rem 0;
+    position: relative;
+    transition: color 0.3s;
+  }
+
+  .nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: var(--text);
+    transform: scaleX(0);
+    transition: transform 0.3s;
+  }
+
+  .nav-links a:hover, .nav-links a.active { color: var(--text); }
+  .nav-links a.active::after, .nav-links a:hover::after { transform: scaleX(1); }
+
+  .site-container {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 7rem 2rem 4rem 2rem;
+  }
+
+  .site-header {
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+
+  .site-title {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.6em;
+    color: var(--dim);
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+  }
+
+  .site-subtitle {
+    font-size: 0.95rem;
+    color: var(--dim);
+    font-style: italic;
+  }
+
+  .divider {
+    width: 1px;
+    height: 50px;
+    background: linear-gradient(to bottom, transparent, var(--border), transparent);
+    margin: 2rem auto;
+  }
+
+  .patch-list { list-style: none; }
+
+  .patch-item {
+    border: 1px solid var(--border);
+    background: var(--surface);
+    margin-bottom: 0.75rem;
+    transition: all 0.3s ease;
+    position: relative;
+  }
+
+  .patch-item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: transparent;
+    transition: background 0.3s;
+  }
+
+  .patch-item:hover {
+    border-color: #2a2a34;
+    transform: translateX(4px);
+  }
+
+  .patch-item:hover::before { background: var(--dim); }
+  .patch-item.current::before { background: var(--current-color, #ffa000); }
+
+  .patch-link {
+    display: block;
+    padding: 1.25rem 1.5rem;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .patch-version {
+    font-family: 'Cinzel', serif;
+    font-size: 0.55rem;
+    letter-spacing: 0.3em;
+    color: var(--dim);
+    text-transform: uppercase;
+    margin-bottom: 0.4rem;
+  }
+
+  .patch-item.current .patch-version::after {
+    content: ' — current';
+    color: var(--current-color, #ffa000);
+    font-style: italic;
+    letter-spacing: 0.15em;
+  }
+
+  .patch-title {
+    font-size: 1.2rem;
+    color: var(--text);
+    margin-bottom: 0.3rem;
+  }
+
+  .patch-date {
+    font-size: 0.8rem;
+    color: var(--dim);
+    font-style: italic;
+  }
+
+  .site-footer {
+    text-align: center;
+    margin-top: 4rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border);
+    font-size: 0.8rem;
+    color: var(--dim);
+    font-style: italic;
+  }
+
+  @media (max-width: 600px) {
+    .top-nav { padding: 0 1.25rem; }
+    .nav-links { gap: 1.5rem; }
+    .site-container { padding: 6rem 1.25rem 3rem 1.25rem; }
+  }
+</style>
 </head>
 <body>
 
@@ -21,14 +227,14 @@
 
 <div class="site-container">
   <header class="site-header">
-    <div class="site-title">Voices</div>
+    <div class="site-title">Archive</div>
     <div class="site-subtitle">"The past is never dead. It's not even past."</div>
   </header>
 
   <div class="divider"></div>
 
   <ul class="patch-list">
-    <li class="patch-item current" style="--voice-color: #ffa000;">
+    <li class="patch-item current" style="--current-color: #ffa000;">
       <a href="v240/index.html" class="patch-link">
         <div class="patch-version">v2.4.0</div>
         <div class="patch-title">The Floodgates</div>

@@ -1,12 +1,200 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>v2.3.0 — The Division | Voices</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Pro:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../assets/style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>v2.3.0 — The Division | Voices</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Pro:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0b;
+    --surface: #111114;
+    --border: #1e1e24;
+    --text: #c8c8d0;
+    --dim: #4a4a58;
+    --voice-glow: rgba(136,136,136,0.04);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-weight: 300;
+    min-height: 100vh;
+    line-height: 1.8;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(ellipse 80% 50% at 50% 30%, var(--voice-glow), transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .top-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 52px;
+    background: linear-gradient(to bottom, rgba(10,10,11,0.98), rgba(10,10,11,0.92));
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 2.5rem;
+    z-index: 100;
+    backdrop-filter: blur(12px);
+  }
+
+  .nav-brand {
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.5em;
+    color: var(--dim);
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+
+  .nav-brand:hover { color: var(--text); }
+
+  .nav-links { display: flex; gap: 2.5rem; }
+
+  .nav-links a {
+    font-family: 'Cinzel', serif;
+    font-size: 0.5rem;
+    letter-spacing: 0.25em;
+    color: var(--dim);
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 0.4rem 0;
+    position: relative;
+    transition: color 0.3s;
+  }
+
+  .nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: var(--text);
+    transform: scaleX(0);
+    transition: transform 0.3s;
+  }
+
+  .nav-links a:hover, .nav-links a.active { color: var(--text); }
+  .nav-links a.active::after, .nav-links a:hover::after { transform: scaleX(1); }
+
+  .site-container {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 7rem 2rem 4rem 2rem;
+  }
+
+  .back-link {
+    display: inline-block;
+    font-family: 'Cinzel', serif;
+    font-size: 0.5rem;
+    letter-spacing: 0.2em;
+    color: var(--dim);
+    text-transform: uppercase;
+    text-decoration: none;
+    margin-bottom: 2.5rem;
+    transition: color 0.3s;
+  }
+
+  .back-link:hover { color: var(--text); }
+  .back-link::before { content: '← '; }
+
+  .patch-header { text-align: center; margin-bottom: 2.5rem; }
+
+  .patch-version {
+    font-family: 'Cinzel', serif;
+    font-size: 0.55rem;
+    letter-spacing: 0.35em;
+    color: var(--dim);
+    text-transform: uppercase;
+    margin-bottom: 0.6rem;
+  }
+
+  .patch-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.6rem;
+    letter-spacing: 0.08em;
+    color: var(--text);
+    margin-bottom: 0.5rem;
+    font-weight: 400;
+  }
+
+  .patch-date {
+    font-size: 0.85rem;
+    color: var(--dim);
+    font-style: italic;
+  }
+
+  .divider {
+    width: 1px;
+    height: 50px;
+    background: linear-gradient(to bottom, transparent, var(--border), transparent);
+    margin: 2rem auto;
+  }
+
+  .section-break {
+    text-align: center;
+    color: var(--dim);
+    margin: 2.5rem 0;
+    letter-spacing: 0.5em;
+  }
+
+  .patch-content {
+    font-size: 1.05rem;
+  }
+
+  .patch-content p {
+    margin-bottom: 1rem;
+  }
+
+  .cipher {
+    font-family: 'Courier New', monospace;
+    font-size: 0.9rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 1.25rem 1.5rem;
+    margin: 1.5rem 0;
+    letter-spacing: 0.05em;
+    color: var(--dim);
+    white-space: pre-wrap;
+    overflow-x: auto;
+  }
+
+  .site-footer {
+    text-align: center;
+    margin-top: 5rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border);
+    font-size: 0.8rem;
+    color: var(--dim);
+    font-style: italic;
+  }
+
+  @media (max-width: 600px) {
+    .top-nav { padding: 0 1.25rem; }
+    .nav-links { gap: 1.5rem; }
+    .site-container { padding: 6rem 1.25rem 3rem 1.25rem; }
+    .patch-title { font-size: 1.3rem; }
+  }
+</style>
 </head>
 <body>
 
@@ -20,14 +208,9 @@
 </nav>
 
 <div class="site-container">
-  <header class="site-header">
-    <div class="site-title"><a href="../index.html">Voices</a></div>
-    <div class="site-subtitle">Patch Archive</div>
-  </header>
-
   <a href="../index.html" class="back-link">Archive</a>
 
-  <article class="patch-note">
+  <article>
     <header class="patch-header">
       <div class="patch-version">v2.3.0</div>
       <div class="patch-title">The Division</div>
@@ -37,7 +220,6 @@
     <div class="divider"></div>
 
     <div class="patch-content">
-      
       <div class="section-break">—</div>
 
       <p>Something was said at the Stirring that wasn't finished. Something was held back that hasn't been named.</p>
@@ -69,7 +251,6 @@ R SZEV YVVM OLLPRMT ULI HLNVLMV DSL KOZBH GSRH DZB.
 WL MLG HGLK.</div>
 
       <div class="section-break">—</div>
-
     </div>
   </article>
 
